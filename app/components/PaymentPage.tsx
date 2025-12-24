@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { CreditCard, Check, ArrowLeft, AlertCircle } from 'lucide-react';
-import { PLANS, SubscriptionPlan } from '@/app/lib/type';
+import { PLANS, SubscriptionPlan } from '@/types';
 import { useUserStats } from '@/hooks/useUserStats';
 
 const PaymentPage: React.FC = () => {

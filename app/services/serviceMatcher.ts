@@ -1,4 +1,4 @@
-import { CategoryType } from '@/app/lib/type';
+import { CategoryType } from '@/types';
 
 export type ServiceSuggestion = {
   category: CategoryType;

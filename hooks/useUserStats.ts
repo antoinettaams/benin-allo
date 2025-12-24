@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { SubscriptionPlan, UserState } from '@/app/lib/type';
+import { SubscriptionPlan, UserState } from '@/types';
 
 export const useUserStats = () => {
   const [userState, setUserState] = useState<UserState>(() => {

@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, ShieldCheck, Phone, AlertCircle } from 'lucide-react';
 import ContactCard from '../components/ContactCard';
-import { CategoryType } from '../lib/type';
+import { CategoryType } from '@/types';
 import { MOCK_CONTACTS } from '@/data';
 
 export default function UrgencesPage() {

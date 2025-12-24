@@ -10,7 +10,7 @@ import {
   Zap,
   BarChart3, 
 } from 'lucide-react';
-import { PLANS, SubscriptionPlan  } from '../lib/type';
+import { PLANS, SubscriptionPlan  } from '@/types';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();

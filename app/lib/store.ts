@@ -1,8 +1,8 @@
 
 'use client';
 import { useState, useEffect } from 'react';
-import { UserState } from './type';
-import { SubscriptionPlan } from './type';
+import { UserState } from '@/types';
+import { SubscriptionPlan } from '@/types';
 
 export const useUserStats = () => {
   const [userState, setUserState] = useState<UserState | null>(null);

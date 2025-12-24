@@ -4,7 +4,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Crown, Check, ArrowRight, Zap, Shield, Users, Globe } from 'lucide-react';
-import { PLANS, SubscriptionPlan } from '@/app/lib/type';
+import { PLANS, SubscriptionPlan } from '@/types';
 import { useUserStats } from '@/hooks/useUserStats';
 
 const Premium: React.FC = () => {

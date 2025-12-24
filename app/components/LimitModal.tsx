@@ -4,7 +4,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { AlertCircle, Crown, Zap } from 'lucide-react';
-import { PLANS, SubscriptionPlan } from '../lib/type';
+import { PLANS, SubscriptionPlan } from '@/types';
 
 interface LimitModalProps {
   isOpen: boolean;

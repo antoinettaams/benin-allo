@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ChevronRight, Zap, BarChart3 } from 'lucide-react';
-import { PLANS, SubscriptionPlan } from '../lib/type';
+import { PLANS, SubscriptionPlan } from '@/types';
 
 const Header = () => {
   const pathname = usePathname();

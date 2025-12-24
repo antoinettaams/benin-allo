@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Lock, Mail, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { PLANS, SubscriptionPlan } from '@/app/lib/type';
+import { PLANS, SubscriptionPlan } from '@/types';
 
 const SubscriptionForm: React.FC = () => {
   const searchParams = useSearchParams();

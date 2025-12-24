@@ -19,7 +19,7 @@ import {
   Heart
 } from 'lucide-react';
 import findRightService from './services/serviceMatcher';
-import { CategoryType } from '@/app/lib/type';
+import { CategoryType } from '@/types';
 import { MOCK_CONTACTS, CATEGORIES } from '@/data';
 
 export default function Home() {

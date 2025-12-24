@@ -7,24 +7,8 @@ import { ChevronLeft, Search } from 'lucide-react';
 import { MOCK_CONTACTS, CATEGORIES } from '@/data';
 import ContactCard from '../components/ContactCard';
 import { useUserStats } from '../../hooks/useUserStats'; 
-import { PLANS } from '../lib/type';
+import { PLANS, Contact, CategoryType, SubscriptionPlan } from '@/types';
 import LimitModal from '../components/LimitModal';
-
-// Définition des types manquants
-type Contact = {
-  id: number;
-  name: string;
-  subCategory: string;
-  phone: string;
-  category: string; // ou CategoryType
-};
-
-enum CategoryType {
-  URGENCES = 'urgences',
-  MEDICAL = 'medical',
-  SERVICE = 'service',
-  AUTRE = 'autre',
-}
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
@@ -42,12 +26,13 @@ export default function SearchPage() {
     setLocalQuery(queryParam); 
   }, [queryParam]);
 
+  // CORRECTION : Supprimez complètement l'annotation de type ": Contact"
   const filteredContacts = useMemo(() => {
-    return MOCK_CONTACTS.filter((c: Contact) => {
+    return MOCK_CONTACTS.filter((c) => {
       const matchCategory = !categoryParam || c.category === categoryParam;
       const matchQuery = !queryParam || 
         c.name.toLowerCase().includes(queryParam.toLowerCase()) || 
-        c.subCategory.toLowerCase().includes(queryParam.toLowerCase());
+        c.subCategory?.toLowerCase().includes(queryParam.toLowerCase());
       return matchCategory && matchQuery;
     });
   }, [categoryParam, queryParam]);
@@ -59,8 +44,11 @@ export default function SearchPage() {
       return; 
     }
     
+    // Vérifier si userState existe
+    if (!userState) return;
+    
     // Vérifier la limite du plan
-    const planDetails = PLANS[userState.plan];
+    const planDetails = PLANS[userState.plan as SubscriptionPlan];
     if (planDetails.limit !== -1 && userState.dailyContacts.count >= planDetails.limit) { 
       setLimitModalOpen(true); 
       return; 
@@ -88,7 +76,7 @@ export default function SearchPage() {
       <LimitModal 
         isOpen={isLimitModalOpen} 
         onClose={() => setLimitModalOpen(false)} 
-        currentPlan={userState.plan} 
+        currentPlan={userState?.plan || SubscriptionPlan.FREE} 
       />
       
       <div className="mb-12">
@@ -102,7 +90,7 @@ export default function SearchPage() {
           <div>
             <h1 className="text-3xl font-black">Explorer</h1>
             <p className="text-blue-600 font-black text-[10px] uppercase tracking-widest">
-              Quota: {PLANS[userState.plan].limit === -1 ? 'Illimité' : `${userState.dailyContacts.count} / ${PLANS[userState.plan].limit}`}
+              Quota: {userState ? (PLANS[userState.plan].limit === -1 ? 'Illimité' : `${userState.dailyContacts.count} / ${PLANS[userState.plan].limit}`) : 'Chargement...'}
             </p>
           </div>
         </div>
