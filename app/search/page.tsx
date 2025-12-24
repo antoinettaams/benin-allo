@@ -1,4 +1,3 @@
-// app/search/page.tsx
 'use client';
 
 import React, { useState, useMemo, useEffect, Suspense } from 'react';
@@ -10,7 +9,7 @@ import { useUserStats } from '../../hooks/useUserStats';
 import { PLANS, Contact, CategoryType, SubscriptionPlan } from '@/types';
 import LimitModal from '../components/LimitModal';
 
-// Composant enfant qui utilise useSearchParams
+// Create a component that uses useSearchParams
 function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -160,14 +159,32 @@ function SearchContent() {
   );
 }
 
-// Composant principal exporté avec Suspense
+// Main page component with Suspense boundary
 export default function SearchPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-[80vh] flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-10 h-10 border-4 border-blue-50 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement de la recherche...</p>
+      <div className="max-w-6xl mx-auto px-4 md:px-8 py-12 md:py-16">
+        <div className="mb-12">
+          <div className="flex items-center gap-6 mb-8">
+            <div className="p-4 bg-gray-50 rounded-2xl">
+              <ChevronLeft size={24} />
+            </div>
+            <div className="animate-pulse">
+              <div className="h-8 w-48 bg-gray-200 rounded mb-2"></div>
+              <div className="h-4 w-32 bg-gray-100 rounded"></div>
+            </div>
+          </div>
+          <div className="h-16 bg-gray-100 rounded-2xl mb-8 animate-pulse"></div>
+          <div className="flex gap-3 overflow-x-auto pb-2">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="h-10 w-24 bg-gray-100 rounded-2xl animate-pulse"></div>
+            ))}
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="h-64 bg-gray-100 rounded-2xl animate-pulse"></div>
+          ))}
         </div>
       </div>
     }>

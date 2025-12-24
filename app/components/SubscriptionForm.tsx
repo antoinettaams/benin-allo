@@ -1,12 +1,12 @@
-// components/SubscriptionForm.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Lock, Mail, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { PLANS, SubscriptionPlan } from '@/types';
 
-const SubscriptionForm: React.FC = () => {
+// Créer un composant interne qui utilise useSearchParams
+function SubscriptionFormContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const planId = searchParams.get('plan') as SubscriptionPlan || SubscriptionPlan.STANDARD;
@@ -153,6 +153,21 @@ const SubscriptionForm: React.FC = () => {
         </form>
       </div>
     </div>
+  );
+}
+
+// Composant principal avec Suspense
+const SubscriptionForm: React.FC = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-[80vh] flex items-center justify-center px-4 py-20 bg-gray-50/30">
+        <div className="bg-white p-10 md:p-16 rounded-[3.5rem] shadow-2xl shadow-blue-900/5 border border-gray-100 max-w-lg w-full flex items-center justify-center">
+          <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+        </div>
+      </div>
+    }>
+      <SubscriptionFormContent />
+    </Suspense>
   );
 };
 
