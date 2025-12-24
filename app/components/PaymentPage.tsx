@@ -1,13 +1,14 @@
 // components/PaymentPage.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { CreditCard, Check, ArrowLeft, AlertCircle } from 'lucide-react';
 import { PLANS, SubscriptionPlan } from '@/types';
 import { useUserStats } from '@/hooks/useUserStats';
 
-const PaymentPage: React.FC = () => {
+// Composant enfant qui utilise useSearchParams
+function PaymentContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { finalizeSubscription } = useUserStats();
@@ -130,6 +131,22 @@ const PaymentPage: React.FC = () => {
         )}
       </div>
     </div>
+  );
+}
+
+// Composant principal exporté avec Suspense
+const PaymentPage: React.FC = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-10 h-10 border-4 border-blue-50 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Préparation du paiement...</p>
+        </div>
+      </div>
+    }>
+      <PaymentContent />
+    </Suspense>
   );
 };
 
