@@ -1,7 +1,7 @@
 // app/search/page.tsx
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { ChevronLeft, Search } from 'lucide-react';
 import { MOCK_CONTACTS, CATEGORIES } from '@/data';
@@ -10,7 +10,8 @@ import { useUserStats } from '../../hooks/useUserStats';
 import { PLANS, Contact, CategoryType, SubscriptionPlan } from '@/types';
 import LimitModal from '../components/LimitModal';
 
-export default function SearchPage() {
+// Composant enfant qui utilise useSearchParams
+function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -26,7 +27,6 @@ export default function SearchPage() {
     setLocalQuery(queryParam); 
   }, [queryParam]);
 
-  // CORRECTION : Supprimez complètement l'annotation de type ": Contact"
   const filteredContacts = useMemo(() => {
     return MOCK_CONTACTS.filter((c) => {
       const matchCategory = !categoryParam || c.category === categoryParam;
@@ -38,16 +38,13 @@ export default function SearchPage() {
   }, [categoryParam, queryParam]);
 
   const handleContactAction = (contact: Contact, action: () => void) => {
-    // Urgences toujours gratuites
     if (contact.category === CategoryType.URGENCES) { 
       action(); 
       return; 
     }
     
-    // Vérifier si userState existe
     if (!userState) return;
     
-    // Vérifier la limite du plan
     const planDetails = PLANS[userState.plan as SubscriptionPlan];
     if (planDetails.limit !== -1 && userState.dailyContacts.count >= planDetails.limit) { 
       setLimitModalOpen(true); 
@@ -160,5 +157,21 @@ export default function SearchPage() {
         )}
       </div>
     </div>
+  );
+}
+
+// Composant principal exporté avec Suspense
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-10 h-10 border-4 border-blue-50 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Chargement de la recherche...</p>
+        </div>
+      </div>
+    }>
+      <SearchContent />
+    </Suspense>
   );
 }
