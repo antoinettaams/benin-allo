@@ -15,12 +15,95 @@ import {
   ShieldCheck,
   Users,
   CheckCircle2,
-  Briefcase,
-  Heart
+  Briefcase
 } from 'lucide-react';
 import findRightService from './services/serviceMatcher';
 import { CategoryType } from '@/types';
 import { MOCK_CONTACTS, CATEGORIES } from '@/data';
+import { motion } from 'framer-motion';
+
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 20 
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 100,
+      damping: 12
+    }
+  }
+};
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" as const }
+  }
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1,
+    transition: { duration: 0.8, ease: "easeOut" as const }
+  }
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { 
+    opacity: 1, 
+    scale: 1,
+    transition: { duration: 0.5, ease: "backOut" as const }
+  }
+};
+
+const slideInFromLeft = {
+  hidden: { opacity: 0, x: -50 },
+  visible: { 
+    opacity: 1, 
+    x: 0,
+    transition: { duration: 0.6, ease: "easeOut" as const }
+  }
+};
+
+const slideInFromRight = {
+  hidden: { opacity: 0, x: 50 },
+  visible: { 
+    opacity: 1, 
+    x: 0,
+    transition: { duration: 0.6, ease: "easeOut" as const }
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.1
+    }
+  }
+};
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,26 +137,54 @@ export default function Home() {
   return (
     <div className="bg-white overflow-x-hidden">
       {/* HERO */}
-      <section className="relative overflow-hidden pt-12 pb-20 md:pt-28 md:pb-40 px-4 hero-gradient">
+      <motion.section 
+        className="relative overflow-hidden pt-12 pb-20 md:pt-28 md:pb-40 px-4 hero-gradient"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
         <div className="max-w-5xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-1.5 rounded-full text-xs font-black mb-8 animate-reveal stagger-1 border border-blue-100 shadow-sm">
+          <motion.div 
+            className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-1.5 rounded-full text-xs font-black mb-8 border border-blue-100 shadow-sm"
+            variants={itemVariants}
+            animate={{
+              scale: [1, 1.05, 1],
+              transition: {
+                duration: 2,
+                repeat: Infinity,
+                repeatType: "reverse" as const
+              }
+            }}
+          >
             <Zap size={14} className="fill-blue-600" /> Plateforme n°1 au Bénin
-          </div>
+          </motion.div>
 
-          <h1 className="text-4xl md:text-7xl font-black text-gray-900 mb-8 tracking-tighter leading-[1] animate-reveal stagger-2">
+          <motion.h1 
+            className="text-4xl md:text-7xl font-black text-gray-900 mb-8 tracking-tighter leading-[1]"
+            variants={itemVariants}
+          >
             Le bon service, <br className="hidden md:block" />
             <span className="text-blue-600">au bon moment.</span>
-          </h1>
+          </motion.h1>
 
-          <p className="text-lg md:text-xl text-gray-500 mb-12 max-w-2xl mx-auto font-medium animate-reveal stagger-3">
-            Trouvez instantanément les professionnels certifiés et les numéros d&apos;urgence partout au Bénin.
-          </p>
-
-          <form
-            onSubmit={handleSearch}
-            className="relative max-w-2xl mx-auto mb-10 animate-reveal stagger-4"
+          <motion.p 
+            className="text-lg md:text-xl text-gray-500 mb-12 max-w-2xl mx-auto font-medium"
+            variants={itemVariants}
           >
-            <div className="flex items-center bg-white border border-gray-100 rounded-[2rem] p-3 shadow-2xl shadow-blue-900/10 hover:border-blue-300 transition-all group">
+            Trouvez instantanément les professionnels certifiés et les numéros d&apos;urgence partout au Bénin.
+          </motion.p>
+
+          <motion.form
+            onSubmit={handleSearch}
+            className="relative max-w-2xl mx-auto mb-10"
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            <motion.div 
+              className="flex items-center bg-white border border-gray-100 rounded-[2rem] p-3 shadow-2xl shadow-blue-900/10 hover:border-blue-300 transition-all group"
+              whileTap={{ scale: 0.99 }}
+            >
               <div className="pl-4 pr-3 text-gray-400 group-focus-within:text-blue-600 transition-colors">
                 <Search size={24} strokeWidth={2.5} />
               </div>
@@ -86,30 +197,59 @@ export default function Home() {
                 onChange={e => setSearchQuery(e.target.value)}
               />
 
-              <button
+              <motion.button
                 type="submit"
                 disabled={aiLoading}
-                className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black text-lg flex items-center gap-2 hover:bg-blue-700 active:scale-95 transition-all disabled:opacity-50 shadow-lg shadow-blue-200"
+                className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black text-lg flex items-center gap-2 hover:bg-blue-700 transition-all disabled:opacity-50 shadow-lg shadow-blue-200"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                {aiLoading ? '...' : 'Chercher'}
-              </button>
-            </div>
-          </form>
+                {aiLoading ? (
+                  <motion.span
+                    animate={{ opacity: [1, 0.5, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    ...
+                  </motion.span>
+                ) : 'Chercher'}
+              </motion.button>
+            </motion.div>
+          </motion.form>
 
           {suggestion && (
-            <div className="max-w-xl mx-auto bg-gray-900 text-white p-6 rounded-[2.5rem] flex items-start gap-5 text-left shadow-2xl animate-reveal border border-white/10">
-              <div className="bg-blue-600 p-3 rounded-2xl flex-shrink-0 shadow-lg shadow-blue-500/20">
+            <motion.div 
+              className="max-w-xl mx-auto bg-gray-900 text-white p-6 rounded-[2.5rem] flex items-start gap-5 text-left shadow-2xl border border-white/10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ type: "spring", stiffness: 100 }}
+            >
+              <motion.div 
+                className="bg-blue-600 p-3 rounded-2xl flex-shrink-0 shadow-lg shadow-blue-500/20"
+                animate={{ rotate: [0, 10, -10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+              >
                 <Sparkles size={24} />
-              </div>
+              </motion.div>
 
               <div className="flex-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-2">
+                <motion.p 
+                  className="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-2"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
                   IA AllôBénin
-                </p>
-                <p className="text-sm font-bold leading-relaxed mb-4">
+                </motion.p>
+                <motion.p 
+                  className="text-sm font-bold leading-relaxed mb-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
                   {suggestion.explanation}
-                </p>
-                <button
+                </motion.p>
+                <motion.button
                   onClick={() =>
                     router.push(
                       `/search?category=${encodeURIComponent(
@@ -118,26 +258,39 @@ export default function Home() {
                     )
                   }
                   className="bg-white text-gray-900 px-5 py-2.5 rounded-xl text-xs font-black flex items-center gap-2 hover:bg-blue-50 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   Explorer {suggestion.category} <ArrowRight size={16} />
-                </button>
+                </motion.button>
               </div>
 
-              <button
+              <motion.button
                 onClick={() => setSuggestion(null)}
                 className="opacity-40 hover:opacity-100 transition-opacity"
+                whileHover={{ rotate: 90 }}
+                transition={{ duration: 0.3 }}
               >
                 <X size={20} />
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           )}
         </div>
-      </section>
+      </motion.section>
 
       {/* SERVICES POPULAIRES */}
-      <section className="px-4 md:px-8 py-20">
+      <motion.section 
+        className="px-4 md:px-8 py-20"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={containerVariants}
+      >
         <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between items-center mb-12">
+          <motion.div 
+            className="flex justify-between items-center mb-12"
+            variants={itemVariants}
+          >
             <h2 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">
               Services populaires
             </h2>
@@ -147,36 +300,56 @@ export default function Home() {
             >
               Toutes les catégories <ChevronRight size={18} />
             </Link>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
             {CATEGORIES.map((cat, i) => (
-              <button
+              <motion.button
                 key={cat.id}
                 onClick={() =>
                   router.push(
                     `/search?category=${encodeURIComponent(cat.type)}`
                   )
                 }
-                className="bg-white p-10 rounded-[2.5rem] border border-gray-100 flex flex-col items-center justify-center gap-5 hover:shadow-2xl hover:border-blue-100 transition-all group animate-reveal"
-                style={{ animationDelay: `${i * 0.05}s` }}
+                className="bg-white p-10 rounded-[2.5rem] border border-gray-100 flex flex-col items-center justify-center gap-5 hover:shadow-2xl hover:border-blue-100 transition-all group"
+                variants={itemVariants}
+                custom={i}
+                whileHover={{ 
+                  scale: 1.05,
+                  y: -10,
+                  transition: { type: "spring", stiffness: 300 }
+                }}
+                whileTap={{ scale: 0.95 }}
               >
-                <div className="text-5xl group-hover:scale-125 transition-transform">
+                <motion.div 
+                  className="text-5xl"
+                  whileHover={{ scale: 1.2, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 200 }}
+                >
                   {cat.icon}
-                </div>
+                </motion.div>
                 <span className="font-black text-gray-900 text-sm uppercase tracking-wider">
                   {cat.name}
                 </span>
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* COMMENT ÇA MARCHE */}
-      <section className="py-24 bg-white px-4 md:px-8 border-b border-gray-50">
+      <motion.section 
+        className="py-24 bg-white px-4 md:px-8 border-b border-gray-50"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={staggerContainer}
+      >
         <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 animate-reveal">
+          <motion.div 
+            className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6"
+            variants={fadeInUp}
+          >
             <div className="max-w-xl text-left">
               <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4 tracking-tighter">
                 Comment ça marche ?
@@ -185,12 +358,23 @@ export default function Home() {
                 Trois étapes simples pour transformer vos urgences en solutions.
               </p>
             </div>
-          </div>
+          </motion.div>
           
-          <div className="flex md:hidden items-center gap-2 mb-6 text-blue-600 font-black text-[10px] uppercase tracking-[0.2em] bg-blue-50 w-fit px-4 py-2 rounded-full animate-reveal stagger-3">
+          <motion.div 
+            className="flex md:hidden items-center gap-2 mb-6 text-blue-600 font-black text-[10px] uppercase tracking-[0.2em] bg-blue-50 w-fit px-4 py-2 rounded-full"
+            variants={fadeIn}
+            animate={{
+              x: [0, 10, 0],
+              transition: {
+                duration: 2,
+                repeat: Infinity,
+                repeatType: "reverse" as const
+              }
+            }}
+          >
             <span>Glissez pour voir</span>
-            <ArrowRight size={14} className="animate-swipe" />
-          </div>
+            <ArrowRight size={14} />
+          </motion.div>
           
           <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar md:grid md:grid-cols-3 gap-6 md:gap-8 pb-8">
             {[
@@ -198,25 +382,37 @@ export default function Home() {
                 step: "01", 
                 title: "Recherchez", 
                 desc: "Décrivez votre besoin en quelques mots dans notre moteur intelligent.", 
-                icon: <Search size={28} className="text-blue-600 animate-icon-scan" /> 
+                icon: <Search size={28} className="text-blue-600" /> 
               },
               { 
                 step: "02", 
                 title: "Choisissez", 
                 desc: "Comparez les professionnels selon leurs avis et leur localisation.", 
-                icon: <CheckCircle2 size={28} className="text-green-600 animate-icon-pop" /> 
+                icon: <CheckCircle2 size={28} className="text-green-600" /> 
               },
               { 
                 step: "03", 
                 title: "Contactez", 
                 desc: "Lancez l'appel ou ouvrez un chat WhatsApp instantanément.", 
-                icon: <Phone size={28} className="text-blue-600 animate-icon-wiggle" /> 
+                icon: <Phone size={28} className="text-blue-600" /> 
               }
             ].map((item, i) => (
-              <div key={i} className="flex-shrink-0 w-[85%] md:w-full snap-start relative group animate-reveal bg-gray-50/70 p-10 rounded-[3rem] border border-transparent hover:border-blue-100 hover:bg-white transition-all duration-500">
-                <div className="mb-10 inline-flex items-center justify-center w-20 h-20 bg-white rounded-3xl shadow-sm group-hover:scale-110 transition-transform">
+              <motion.div 
+                key={i} 
+                className="flex-shrink-0 w-[85%] md:w-full snap-start relative group bg-gray-50/70 p-10 rounded-[3rem] border border-transparent hover:border-blue-100 hover:bg-white transition-all duration-500"
+                variants={fadeInUp}
+                whileHover={{ 
+                  y: -10,
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <motion.div 
+                  className="mb-10 inline-flex items-center justify-center w-20 h-20 bg-white rounded-3xl shadow-sm"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 200 }}
+                >
                   {item.icon}
-                </div>
+                </motion.div>
                 <div className="absolute top-10 right-10 text-5xl font-black text-blue-600/5">
                   {item.step}
                 </div>
@@ -226,16 +422,22 @@ export default function Home() {
                 <p className="text-gray-500 text-sm leading-relaxed font-medium">
                   {item.desc}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* FEATURES */}
-      <section className="py-24 bg-gray-50 px-4 md:px-8">
+      <motion.section 
+        className="py-24 bg-gray-50 px-4 md:px-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={staggerContainer}
+      >
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <div className="animate-reveal">
+          <motion.div variants={slideInFromLeft}>
             <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-10 tracking-tighter">
               Une plateforme pour <span className="text-blue-600">votre sécurité.</span>
             </h2>
@@ -257,10 +459,21 @@ export default function Home() {
                   icon: <Users className="text-blue-500" size={24} /> 
                 }
               ].map((f, i) => (
-                <div key={i} className="flex gap-6 p-8 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all">
-                  <div className="mt-1 bg-gray-50 p-4 rounded-2xl group-hover:bg-blue-50 transition-colors">
+                <motion.div 
+                  key={i} 
+                  className="flex gap-6 p-8 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all"
+                  variants={fadeInUp}
+                  whileHover={{ 
+                    x: 10,
+                    transition: { duration: 0.3 }
+                  }}
+                >
+                  <motion.div 
+                    className="mt-1 bg-gray-50 p-4 rounded-2xl group-hover:bg-blue-50 transition-colors"
+                    whileHover={{ rotate: 10 }}
+                  >
                     {f.icon}
-                  </div>
+                  </motion.div>
                   <div>
                     <h4 className="font-black text-lg text-gray-900 mb-2">
                       {f.title}
@@ -269,16 +482,37 @@ export default function Home() {
                       {f.desc}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
           
-          <div className="relative animate-reveal stagger-2">
+          <motion.div 
+            className="relative"
+            variants={slideInFromRight}
+            animate={{
+              y: [0, -10, 0],
+              transition: {
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }
+            }}
+          >
             <div className="bg-blue-600 rounded-[3.5rem] p-12 text-white aspect-square flex flex-col justify-center items-center text-center shadow-2xl">
-              <div className="text-8xl font-black mb-6 tracking-tighter">
+              <motion.div 
+                className="text-8xl font-black mb-6 tracking-tighter"
+                animate={{
+                  scale: [1, 1.1, 1],
+                  transition: {
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatType: "reverse" as const
+                  }
+                }}
+              >
                 24/7
-              </div>
+              </motion.div>
               <p className="text-2xl font-black mb-10 px-6">
                 Toujours là quand vous en avez besoin.
               </p>
@@ -286,18 +520,34 @@ export default function Home() {
                 Utilisateurs actifs au Bénin
               </p>
             </div>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* URGENCES */}
-      <section className="px-4 md:px-8 py-24">
+      <motion.section 
+        className="px-4 md:px-8 py-24"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={scaleIn}
+      >
         <div className="max-w-6xl mx-auto bg-red-600 rounded-[4rem] p-10 md:p-20 text-white relative overflow-hidden shadow-2xl">
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-white/20 px-4 py-1.5 rounded-full text-xs font-black mb-8 uppercase tracking-widest border border-white/20">
+            <motion.div variants={fadeInUp}>
+              <motion.div 
+                className="inline-flex items-center gap-2 bg-white/20 px-4 py-1.5 rounded-full text-xs font-black mb-8 uppercase tracking-widest border border-white/20"
+                animate={{
+                  scale: [1, 1.05, 1],
+                  transition: {
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatType: "reverse" as const
+                  }
+                }}
+              >
                 🚨 Urgence Absolue
-              </div>
+              </motion.div>
               <h2 className="text-4xl md:text-6xl font-black mb-8 tracking-tighter">
                 Votre sécurité <br /> n&apos;attend pas.
               </h2>
@@ -305,24 +555,46 @@ export default function Home() {
                 Accès gratuit aux secours publics : Police, SAMU, Pompiers.
               </p>
               <div className="flex flex-col sm:flex-row gap-5">
-                <button 
+                <motion.button 
                   onClick={() => router.push('/urgences')} 
                   className="bg-white text-red-600 px-12 py-5 rounded-2xl font-black text-xl hover:bg-red-50 transition-all shadow-xl"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   Voir les numéros
-                </button>
-                <button 
+                </motion.button>
+                <motion.button 
                   onClick={() => window.location.href = 'tel:117'} 
                   className="bg-red-700/50 text-white px-12 py-5 rounded-2xl font-black text-xl border-2 border-white/30 flex items-center justify-center gap-3"
+                  whileHover={{ scale: 1.05, backgroundColor: "rgba(185, 28, 28, 0.6)" }}
+                  whileTap={{ scale: 0.95 }}
+                  animate={{
+                    borderColor: ["rgba(255, 255, 255, 0.3)", "rgba(255, 255, 255, 0.8)", "rgba(255, 255, 255, 0.3)"],
+                    transition: {
+                      duration: 2,
+                      repeat: Infinity
+                    }
+                  }}
                 >
                   Appeler 117
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
             
-            <div className="space-y-4">
-              {emergencyContacts.slice(0, 2).map(contact => (
-                <div key={contact.id} className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-[2.5rem] flex items-center justify-between group hover:bg-white/20 transition-all">
+            <motion.div 
+              className="space-y-4"
+              variants={staggerContainer}
+            >
+              {emergencyContacts.slice(0, 2).map((contact, i) => (
+                <motion.div 
+                  key={contact.id} 
+                  className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-[2.5rem] flex items-center justify-between group hover:bg-white/20 transition-all"
+                  variants={fadeInUp}
+                  whileHover={{ 
+                    scale: 1.02,
+                    transition: { duration: 0.3 }
+                  }}
+                >
                   <div>
                     <span className="text-[10px] font-black uppercase opacity-60 tracking-widest block mb-2">
                       {contact.subCategory}
@@ -331,27 +603,50 @@ export default function Home() {
                       {contact.name}
                     </h4>
                   </div>
-                  <button 
+                  <motion.button 
                     onClick={() => window.location.href = `tel:${contact.phone}`} 
-                    className="w-16 h-16 bg-white text-red-600 rounded-2xl flex items-center justify-center hover:scale-110 transition-all"
+                    className="w-16 h-16 bg-white text-red-600 rounded-2xl flex items-center justify-center"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     <Phone size={28} strokeWidth={2.5} />
-                  </button>
-                </div>
+                  </motion.button>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* TÉMOIGNAGES */}
-      <section className="py-24 bg-white px-4 text-center">
+      <motion.section 
+        className="py-24 bg-white px-4 text-center"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeIn}
+      >
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-sm font-black text-blue-600 uppercase tracking-[0.4em] mb-16">
+          <motion.h2 
+            className="text-sm font-black text-blue-600 uppercase tracking-[0.4em] mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
             Ils nous font confiance
-          </h2>
+          </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="bg-gray-50 p-12 rounded-[3.5rem] text-left border border-gray-100 italic font-medium text-gray-600 relative group hover:bg-white hover:shadow-2xl transition-all duration-500">
+            <motion.div 
+              className="bg-gray-50 p-12 rounded-[3.5rem] text-left border border-gray-100 italic font-medium text-gray-600 relative group hover:bg-white hover:shadow-2xl transition-all duration-500"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ 
+                y: -10,
+                transition: { duration: 0.3 }
+              }}
+            >
               <p className="relative z-10 leading-relaxed">
                 &quot;J&apos;ai pu trouver un dépanneur moto à Calavi en moins de 2 minutes alors que j&apos;étais bloqué en pleine nuit. AllôBénin m&apos;a sauvé la mise !&quot;
               </p>
@@ -366,9 +661,19 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
             
-            <div className="bg-gray-50 p-12 rounded-[3.5rem] text-left border border-gray-100 italic font-medium text-gray-600 relative group hover:bg-white hover:shadow-2xl transition-all duration-500">
+            <motion.div 
+              className="bg-gray-50 p-12 rounded-[3.5rem] text-left border border-gray-100 italic font-medium text-gray-600 relative group hover:bg-white hover:shadow-2xl transition-all duration-500"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              whileHover={{ 
+                y: -10,
+                transition: { duration: 0.3 }
+              }}
+            >
               <p className="relative z-10 leading-relaxed">
                 &quot;Simple et efficace. On devrait tous avoir ça sur notre écran d&apos;accueil.&quot;
               </p>
@@ -383,20 +688,33 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* BECOME PARTNER */}
-      <section className="py-24 bg-white px-4 md:px-8 border-t border-gray-50">
-        <div className="max-w-6xl mx-auto bg-gray-900 rounded-[4rem] p-10 md:p-20 text-white flex flex-col md:flex-row items-center justify-between gap-12 animate-reveal relative overflow-hidden">
+      <motion.section 
+        className="py-24 bg-white px-4 md:px-8 border-t border-gray-50"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={scaleIn}
+      >
+        <div className="max-w-6xl mx-auto bg-gray-900 rounded-[4rem] p-10 md:p-20 text-white flex flex-col md:flex-row items-center justify-between gap-12 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 blur-[100px] rounded-full"></div>
           
-          <div className="max-w-xl text-center md:text-left relative z-10">
-            <div className="w-16 h-16 bg-white/10 text-blue-400 rounded-2xl flex items-center justify-center mb-8 mx-auto md:mx-0 border border-white/10 backdrop-blur-sm">
+          <motion.div 
+            className="max-w-xl text-center md:text-left relative z-10"
+            variants={fadeInUp}
+          >
+            <motion.div 
+              className="w-16 h-16 bg-white/10 text-blue-400 rounded-2xl flex items-center justify-center mb-8 mx-auto md:mx-0 border border-white/10 backdrop-blur-sm"
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.6 }}
+            >
               <Briefcase size={32} />
-            </div>
+            </motion.div>
             
             <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter">
               Vous êtes un <span className="text-blue-400">professionnel ?</span>
@@ -406,22 +724,43 @@ export default function Home() {
               Rejoignez la plateforme de confiance au Bénin. Augmentez votre visibilité et recevez des appels directs de clients qualifiés dans votre zone.
             </p>
             
-            <div className="flex flex-wrap justify-center md:justify-start gap-4">
+            <motion.div 
+              className="flex flex-wrap justify-center md:justify-start gap-4"
+              variants={staggerContainer}
+            >
               {["Profil Vérifié", "Statuts WhatsApp", "Localisation Maps"].map((text, i) => (
-                <div key={i} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-white/5 border border-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
+                <motion.div 
+                  key={i} 
+                  className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-white/5 border border-white/10 px-4 py-2 rounded-full backdrop-blur-sm"
+                  variants={fadeIn}
+                  whileHover={{ 
+                    scale: 1.05,
+                    backgroundColor: "rgba(255, 255, 255, 0.1)"
+                  }}
+                >
                   <CheckCircle2 size={14} className="text-blue-400" /> {text}
-                </div>
+                </motion.div>
               ))}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
           
-          <div className="w-full md:w-auto relative z-10">
-            <button className="w-full md:w-auto bg-blue-600 text-white px-12 py-6 rounded-[2rem] font-black text-xl hover:bg-blue-700 transition-all shadow-2xl shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-3">
+          <motion.div 
+            className="w-full md:w-auto relative z-10"
+            variants={fadeInUp}
+          >
+            <motion.button 
+              className="w-full md:w-auto bg-blue-600 text-white px-12 py-6 rounded-[2rem] font-black text-xl hover:bg-blue-700 transition-all shadow-2xl shadow-blue-500/20 flex items-center justify-center gap-3"
+              whileHover={{ 
+                scale: 1.05,
+                transition: { type: "spring", stiffness: 300 }
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
               Devenir Partenaire <ArrowRight size={24} />
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }

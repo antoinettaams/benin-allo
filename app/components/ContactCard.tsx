@@ -81,7 +81,7 @@ const ContactCard: React.FC<ContactCardProps> = ({ contact, onCall, onWhatsApp, 
         <div className="flex gap-2.5">
           <button 
             onClick={() => onCall(contact.phone)}
-            className="flex-1 bg-blue-600 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-blue-700 active:scale-95 transition-all shadow-lg shadow-blue-100"
+            className="cursor-pointer flex-1 bg-blue-600 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-blue-700 active:scale-95 transition-all shadow-lg shadow-blue-100"
           >
             <Phone size={16} />
             <span className="text-sm">Appeler</span>
