@@ -1,5 +1,5 @@
 'use client';
-import { FaFacebookF, FaInstagram, FaTiktok } from 'react-icons/fa';
+import { Facebook, Instagram } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -25,21 +25,45 @@ const Footer = () => {
         <div className="flex flex-col gap-4">
           <p className="text-sm font-bold text-gray-500 uppercase tracking-wide">Suivez-nous</p>
           <div className="flex gap-4">
-            <a href="https://facebook.com" target="_blank" className="text-blue-600 hover:text-blue-800 transition-all transform hover:scale-110 rounded-full shadow-md p-2">
-              <FaFacebookF size={20} />
+            <a 
+              href="https://facebook.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 transition-all transform hover:scale-110 rounded-full shadow-md p-2"
+            >
+              <Facebook size={20} />
             </a>
-            <a href="https://instagram.com" target="_blank" className="text-pink-500 hover:text-pink-700 transition-all transform hover:scale-110 rounded-full shadow-md p-2">
-              <FaInstagram size={20} />
+            <a 
+              href="https://instagram.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-pink-500 hover:text-pink-700 transition-all transform hover:scale-110 rounded-full shadow-md p-2"
+            >
+              <Instagram size={20} />
             </a>
-            <a href="https://www.tiktok.com" target="_blank" className="text-black hover:text-gray-800 transition-all transform hover:scale-110 rounded-full shadow-md p-2">
-              <FaTiktok size={20} />
+            {/* TikTok avec SVG personnalisé car non disponible dans lucide-react */}
+            <a 
+              href="https://www.tiktok.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-black hover:text-gray-800 transition-all transform hover:scale-110 rounded-full shadow-md p-2"
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="20" 
+                height="20" 
+                viewBox="0 0 24 24" 
+                fill="currentColor"
+              >
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.33 6.33 0 0 0-1-.05A6.34 6.34 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+              </svg>
             </a>
           </div>
         </div>
 
         {/* Copyright */}
         <p className="text-xs sm:text-sm font-bold text-gray-300 text-left md:text-right mt-6 md:mt-0">
-          © {new Date().getFullYear()} AllôBénin. Fait à Cotonou.
+          © {new Date().getFullYear()} AllôBénin.
         </p>
       </div>
     </footer>
